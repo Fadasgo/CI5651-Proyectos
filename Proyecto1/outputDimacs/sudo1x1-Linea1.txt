@@ -1,0 +1,5 @@
+c solucion de la formula CNF del archivo sudo1x1.txt linea 1
+c RESULT:	SAT
+c Total Run Time					1.1e-05
+p cnf 1 1 
+v 1

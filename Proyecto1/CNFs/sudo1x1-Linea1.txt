@@ -1,0 +1,4 @@
+c caso seleccionado del archivo: sudo1x1.txt
+c caso de prueba de la linea 1 
+p cnf 1 1 
+1 0

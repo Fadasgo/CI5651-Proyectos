@@ -1,0 +1,21 @@
+Z-Chaff Version: zChaff 2007.3.12
+Solving /home/fadasgo/Escritorio/sudokuSat/CNFs/sudo1x1-Linea1.txt ......
+
+c 1 Clauses are true, Verify Solution successful.
+Instance Satisfiable
+1 Random Seed Used				0
+Max Decision Level				0
+Num. of Decisions				1
+( Stack + Vsids + Shrinking Decisions )		0 + 0 + 0
+Original Num Variables				1
+Original Num Clauses				1
+Original Num Literals				1
+Added Conflict Clauses				0
+Num of Shrinkings				0
+Deleted Conflict Clauses			0
+Deleted Clauses					0
+Added Conflict Literals				0
+Deleted (Total) Literals			0
+Number of Implication				1
+Total Run Time					1.1e-05
+RESULT:	SAT
