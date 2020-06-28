@@ -5,6 +5,8 @@ Moisés González 11-10406
 Fabio Suárez    12-10578
 """
 
+import sys
+
 class Solver(object):
 
     def __init__(self):
@@ -95,3 +97,33 @@ class Solver(object):
                 return False
 
         return True
+
+
+    def solve(self, var_index):
+        if var_index == self.number_vars:
+            if self.check_solution():
+                return True
+            else: return False
+
+        for v in [0,1]:
+            self.vars[var_index] = v
+            if self.check_list_watched((var_index <<1) | v):
+                if self.solve(var_index + 1):
+                    return True
+
+        self.vars[var_index] = None
+
+    def output_dimacs(self):
+        print("c solucion para formula CNF")
+        print("s cnf {} {}".format(self.number_vars, self.number_clauses))
+        for v in self.vars:
+            print("v {}".format(v))
+        pass
+
+if __name__ == '__main__':
+    s = Solver()
+    s.read(sys.argv[1])
+    if s.solve(0):
+        s.output_dimacs()
+    else:
+        print("UNSAT")
