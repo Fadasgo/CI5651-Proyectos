@@ -5,7 +5,6 @@ Moisés González 11-10406
 Fabio Suárez    12-10578
 """
 
-
 class Solver(object):
 
     def __init__(self):
@@ -13,6 +12,7 @@ class Solver(object):
         self.vars = []
         self.number_clauses = 0
         self.number_vars = 0
+        self.list_watched = []
 
     def read(self, filename):
         tmp_clause = []
@@ -30,7 +30,8 @@ class Solver(object):
                     if lit == '0':
                         self.clauses.append(tmp_clause)
                         tmp_clause = []
-                        if (len(tmp_clause) == self.number_clauses):
+                        if (len(tmp_clause) >= self.number_clauses):
+                            self.init_list_watched()
                             return
                         continue
                     tmp_clause.append(self.__encode_lit(lit))
@@ -38,18 +39,59 @@ class Solver(object):
                 if tmp_clause:
                     self.clauses.append(tmp_clause)
                     tmp_clause = []
+                    self.init_list_watched()
+
+        self.init_list_watched()
 
     def evaluate_lit(self, lit):
-        var_index = literal >> 1
-        var_sign = literal & 1
+        var_index = lit >> 1
+        var_sign = lit & 1
         if self.vars[var_index] is None: return None
         return self.vars[var_index] == var_sign ^ 1
 
+    # Biyeccion de Z a N. Para poder usar los literales como indices
+    # de una lista
     def __encode_lit(self, lit):
         lit = int(lit)
         if lit > 0:
             sign = 0
         else:
             lit = -lit
-            sign = -1
+            sign = 1
         return ((lit-1) << 1) | sign
+
+    # Buscamos algun literal True en cada clausula, Si no
+    # lo conseguimos, no es solucion
+    def check_solution(self):
+        for c in self.clauses:
+            for lit in c:
+                if self.evaluate_lit(lit) == True:
+                    break
+            else:
+                return False
+        return True
+
+    def init_list_watched(self):
+        self.list_watched = [[] for _ in range(2* self.number_vars)]
+        for clause in self.clauses:
+            self.list_watched[clause[0]].append(clause)
+
+    def check_list_watched(self, literal):
+        # Iteramos mientras hayan clausulas que observan
+        # el literal
+        while(self.list_watched[literal]):
+            clause = self.list_watched[literal][0]
+
+            new_watched = False
+
+            for new_lit in clause:
+                if self.evaluate_lit(new_lit) is not False:
+                    new_watched = True
+                    del self.list_watched[literal][0]
+                    self.list_watched[new_lit].append(clause)
+                    break
+
+            if not new_watched:
+                return False
+
+        return True
