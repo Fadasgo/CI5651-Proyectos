@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 import re
+from solver import Solver
 
 rutaActual = os.getcwd()
 
@@ -81,6 +82,13 @@ def runZchaff(nombreArchivo, tiempoCorrida):
         subprocess.call([rutaZchaff, rutaEntrada, " "+ str(tiempoCorrida) ,rutaSalida], stdout = f)
 
     archivoSalida.close()
+
+def runDPLL(nombreArchivo=None):
+    s = Solver()
+    s.read(nombreArchivo)
+    is_sat = "SAT" if s.solve(0) else "UNSAT"
+    output = s.output_dimacs()
+    return (s.vars, s.number_clauses, is_sat, output)
 
 # recibe un int y lo convierte en string
 def imprimirVariable(lit):
@@ -416,6 +424,32 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                 
                 
                 # Se ejecuta el CNF con zchaff o solver propio (opcion 0 / 1)
+                if method == 1:
+                    ruta="./CNFs/sudo4x4-Linea1.txt"
+                    time = 0
+                    ( satValues, num_clauses, is_sat, output) = runDPLL(ruta)
+
+                    for x,y in enumerate(satValues):
+                        if y == 1:
+                            tupla = cnf_data.variables[str(x+1)]
+                            m[tupla[0]-1][tupla[1]-1] = tupla[2] 
+
+                    sudok = gridSudoku(m,int(info[0]))                   
+
+                    cnf_sol = "c solucion de la formula CNF del archivo {}\n".format(ruta)
+                    cnf_sol += "c RESULT: {}\n".format(is_sat)
+                    cnf_sol += "c Total Run Time: {}\n".format(time)
+                    cnf_sol += output
+                    grid_out = is_sat
+                    grid_out += "\n\nTotal Run Time {}\n\n".format(time)
+                    grid_out += "{}".format(sudok)
+
+                    # with open(rutaReporteDPLL)
+
+                    print(grid_out)
+
+
+
                 if (method == 0):
                     runZchaff(solcFile, tiempoCorrida)
                     h1 = "p cnf " + imprimirVariable(len(literals)) + " " + imprimirVariable(len(clauses)) + " \n"

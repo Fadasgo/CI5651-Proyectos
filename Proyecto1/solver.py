@@ -15,9 +15,11 @@ class Solver(object):
         self.number_clauses = 0
         self.number_vars = 0
         self.list_watched = []
+        self.filename = ''
 
     def read(self, filename):
         tmp_clause = []
+        self.filename = filename
 
         with open(filename, 'r') as f:
             for line in f:
@@ -114,11 +116,15 @@ class Solver(object):
         self.vars[var_index] = None
 
     def output_dimacs(self):
-        print("c solucion para formula CNF")
-        print("s cnf {} {}".format(self.number_vars, self.number_clauses))
-        for v in self.vars:
-            print("v {}".format(v))
-        pass
+        # print("c solucion para formula CNF {}".format(self.filename))
+        out = "s cnf {} {}\n".format(self.number_vars, self.number_clauses)
+        for v,s in enumerate(self.vars):
+            if s > 0:
+                out += "v {}\n".format(v+1)
+            else:
+                out += ("v {}\n".format(-(v+1)))
+        return out
+
 
 if __name__ == '__main__':
     s = Solver()
