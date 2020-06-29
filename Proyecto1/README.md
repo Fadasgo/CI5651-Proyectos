@@ -97,7 +97,8 @@ archivo nombreDelArchivo donde se extrajo el caso de prueba.  Cada archivo va a 
 
 	- CNFs: Esta carpeta posee los archivos en formato CNF DIMACS como se encuentran especificado en el enunciado.
 
-	- outputDimacs: Esta carpeta posee los archivos en formato Dimacs del resultado del satSolver seleccionado.Siguiendo la especificación del enunciado.
+	- outputDimacs: Esta carpeta posee los archivos en formato Dimacs del resultado del satSolver seleccionado solamente cuando es satisfacible la respuesta. 
+					Siguiendo el formato del enunciado.
 	
 	- outputZCHAFF: En esta carpeta cada archivo posee las estadísticas que devuelve zchaff por la terminal para su caso especifico determinado por el nombre del archivo.
 	
@@ -184,5 +185,4 @@ Por último también pudo observarse que una buena implementación de restriccio
 
 		Moisés González - 11-10406
 		Fabio  Suárez   - 12-10578 
-
 
