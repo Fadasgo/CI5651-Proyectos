@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 import re
-import time
+import time as ttime
 from solver import Solver
 
 rutaActual = os.getcwd()
@@ -429,9 +429,9 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                 # Se ejecuta el CNF con zchaff o solver propio (opcion 0 / 1)
                 if method == 1:
                     ruta=rutaDirCNF+solcFile
-                    start_time = time.time()
+                    start_time = ttime.time()
                     ( satValues, num_clauses, is_sat, output) = runDPLL(ruta)
-                    time = (time.time() - start_time)
+                    time = (ttime.time() - start_time)
 
                     for x,y in enumerate(satValues):
                         if y == 1:
