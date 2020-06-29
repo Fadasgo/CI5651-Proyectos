@@ -76,8 +76,30 @@ la cual nos permitirá más adelante después de resolver la satisfacibilidad de
 
 <p> El algoritmo implementado es DPLL el cual es un algoritmo de búsqueda más inferencia que permite resolver la teoría asociada a un problema de satisfacibilidad. Por otro lado se tuvo que implementar el algoritmo de propagación unitaria, ya que este es el núcleo que le permite realizar la inferencia al DPLL y a su vez también depende de este algoritmo que tan efectiva va a ser la ejecución del DPLL.</p>
 
-La implementación de dichos algoritmos se de la siguiente forma... 
+El algoritmo DPLL es un algoritmo de backtracking, que hace uso de varias
+estrategias bastante inteligentes para reducir el espacio de búsqueda.
+En particular hacemos seguimiento de cada clausula para poder identificar
+rápidamente posibles conflictos.
 
+Por simplicidad y flexibilidad se optó por hacer uso predominante de listas.
+Una lista de tamaño igual al numero de variables nos permite guardar la
+asignación de las mismas además de una fácil indexación, una variable `i` 
+se encuentra en la posición `i-1`.
+
+Para el caso de los literales se utiliza una biyección de `Z` a `N`, en la
+que un literal `i` se corresponde con un entero `2*i` y un literal `-i`
+se corresponde con un entero `2*i + 1`. De esta forma podemos usar operaciones
+a bits para extraer tanto el índice como la negación.
+
+La estructura de datos principales es una lista para lo que se conoce como
+__watched literals__.
+La idea consiste en que cada clausula lleva seguimiento
+de un literal, al momento de una asignación debemos asegurarnos de que su 
+valor no sea falso (es decir, verdadero o indeterminado).
+Mantener esta restricción es lo que nos permite identificar rápidamente
+los conflictos, al momento en que deja de cumplirse no existe ninguna
+variable en la clausula que pueda tomar el valor de verdad y por lo tanto
+la asignación actual no es una solución.
 
 #### Traducción SAT a Sudoku
 	
