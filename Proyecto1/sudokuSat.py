@@ -425,7 +425,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                 
                 # Se ejecuta el CNF con zchaff o solver propio (opcion 0 / 1)
                 if method == 1:
-                    ruta="./CNFs/sudo4x4-Linea1.txt"
+                    ruta=rutaDirCNF+solcFile
                     time = 0
                     ( satValues, num_clauses, is_sat, output) = runDPLL(ruta)
 
@@ -436,6 +436,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
 
                     sudok = gridSudoku(m,int(info[0]))                   
 
+
                     cnf_sol = "c solucion de la formula CNF del archivo {}\n".format(ruta)
                     cnf_sol += "c RESULT: {}\n".format(is_sat)
                     cnf_sol += "c Total Run Time: {}\n".format(time)
@@ -444,9 +445,17 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                     grid_out += "\n\nTotal Run Time {}\n\n".format(time)
                     grid_out += "{}".format(sudok)
 
-                    # with open(rutaReporteDPLL)
+                    if (is_sat == "SAT"):
+                        with open(rutaOutputDimacs + solcFile, 'w') as f:
+                            f.write(cnf_sol)
 
-                    print(grid_out)
+                        with open(rutaReporteDPLL + "SOLUCION_" + solcFile, "w") as f:
+                            f.write(grid_out)
+                    else:
+                        with open(rutaReporteDPLL + "SOLUCION_" + solcFile, "w") as f: 
+                            f.write("UNSAT")
+
+
 
 
 
