@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 import re
+import time
 from solver import Solver
 
 rutaActual = os.getcwd()
@@ -427,9 +428,10 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                 
                 # Se ejecuta el CNF con zchaff o solver propio (opcion 0 / 1)
                 if method == 1:
-                    ruta="./CNFs/sudo4x4-Linea1.txt"
-                    time = 0
+                    ruta=rutaDirCNF+solcFile
+                    start_time = time.time()
                     ( satValues, num_clauses, is_sat, output) = runDPLL(ruta)
+                    time = (time.time() - start_time)
 
                     for x,y in enumerate(satValues):
                         if y == 1:
@@ -437,6 +439,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                             m[tupla[0]-1][tupla[1]-1] = tupla[2] 
 
                     sudok = gridSudoku(m,int(info[0]))                   
+
 
                     cnf_sol = "c solucion de la formula CNF del archivo {}\n".format(ruta)
                     cnf_sol += "c RESULT: {}\n".format(is_sat)
@@ -446,9 +449,19 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                     grid_out += "\n\nTotal Run Time {}\n\n".format(time)
                     grid_out += "{}".format(sudok)
 
-                    # with open(rutaReporteDPLL)
 
-                    print(grid_out)
+                    if (is_sat == "SAT"):
+                        with open(rutaOutputDimacs + solcFile, 'w') as f:
+                            f.write(cnf_sol)
+
+                        with open(rutaReporteDPLL + "SOLUCION_" + solcFile, "w") as f:
+                            f.write(grid_out)
+                    else:
+                        with open(rutaReporteDPLL + "SOLUCION_" + solcFile, "w") as f: 
+                            f.write("UNSAT")
+
+
+
 
 
 

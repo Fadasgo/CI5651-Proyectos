@@ -118,6 +118,8 @@ class Solver(object):
     def output_dimacs(self):
         # print("c solucion para formula CNF {}".format(self.filename))
         out = "s cnf {} {}\n".format(self.number_vars, self.number_clauses)
+        if self.vars[0] is None:
+            return out
         for v,s in enumerate(self.vars):
             if s > 0:
                 out += "v {}\n".format(v+1)
