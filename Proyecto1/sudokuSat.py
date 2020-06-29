@@ -12,6 +12,7 @@ rutaActual = os.getcwd()
 # Fabio  Suarez
 
 rutaActual = os.getcwd()
+rutaDirTest = rutaActual + "/Tests/"
 rutaDirCNF = rutaActual + "/CNFs/"
 rutaOutputDimacs = rutaActual + "/outputDimacs/"
 rutaReporteZchaff = rutaActual + "/ReporteZchaffRun/"
@@ -19,6 +20,7 @@ rutaReporteDPLL = rutaActual + "/ReporteDPLLrun/"
 rutaZchaff = rutaActual +"/zchaff.2008.10.12/zchaff/zchaff"
 rutaOutputZchaff = rutaActual + "/outputZCHAFF/"
 
+chaffTimes = []  # Arreglo que guarda los tiempos de corrida de los casos de prueba para zchaff
 
 class cnfData:
     def __init__(self, c, var, w):
@@ -327,7 +329,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
     if archivo.endswith('.txt'):
         # Caso de la linea
         numLinea = 1
-        with open(str(archivo)) as f:            
+        with open(rutaDirTest+str(archivo)) as f:            
             for line in f:
                 #Creamos la matriz de acuerdo al tamaño del sudoku 
                 # info: contiene en la posicion 0 el numero de orden del sudoku 
@@ -452,7 +454,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
 
                 if (method == 0):
                     runZchaff(solcFile, tiempoCorrida)
-                    h1 = "p cnf " + imprimirVariable(len(literals)) + " " + imprimirVariable(len(clauses)) + " \n"
+                    h1 = "s cnf " + imprimirVariable(len(literals)) + " " + imprimirVariable(len(clauses)) + " \n"
 
 
                     with open(rutaOutputZchaff+solcFile) as f:
@@ -475,6 +477,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                             satValues = lines[5].split()
                             result = lines[-1]
                             time = lines[-2]
+                            chaffTimes.append(str(time.split()[3]))
                             h1 = "c " + result + "c " + time + h1
 
                             for x in satValues:
@@ -536,8 +539,7 @@ if len(sys.argv) == 3 or len(sys.argv) == 4:
                 # CASO en el que hay que correr con el DPLL solver
 
                 numLinea += 1
-                # solo es para ir probando con el primer caso este exit
-                #sys.exit()
-        # Creamos los archivos de los reportes finales en sus respectivas carpetas
-        # agarramos el nombre del solcFile para poder crear el ultimo archivo
-                 
+
+    else:
+        print("\n El archivo de casos de prueba debe tener la extension txt \n Ejemplo: prueba.txt")
+        sys.exit()             
