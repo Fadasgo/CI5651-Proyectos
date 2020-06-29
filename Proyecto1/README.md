@@ -1,4 +1,4 @@
-<!-- PROJECT LOGO -->
+
 <br />
 <p align="center">
 
@@ -23,8 +23,7 @@
   mediante la prueba de si dicha teoría creada es satisfacible. Para esto se  procede a probar la satisfacibilidad con el solver de Zchaff de la universidad  
   de Princeton y a su vez con una implementación del algoritmo DPLL (Davis-Putnam-Logemann-Loveland) hecho por el equipo. Luego de obtener los resultados se procede 
   a verificar y crear un reporte que muestre el estado final del problema, es decir, SAT si existe una solución además de brindar el tiempo de corrida y la configuración final 
-  de la matriz. Para el otro caso si no es satisfacible devolver UNSAT y si el tiempo no fue suficiente para resolver, devolver un mensaje que notifique en el reporte  
-  asociado al problema que dicha solución no pudo ser encontrada en el tiempo dado. </p>
+  de la matriz. Para el otro caso si no es satisfacible devolver UNSAT y si el tiempo no fue suficiente para resolver, devolver un mensaje que notifique en el reporte  asociado al problema que dicha solución no pudo ser encontrada en el tiempo dado. </p>
 
 ### Implementado Con
 	
@@ -66,7 +65,7 @@ número de variables está restringido a 81*9 = 729 variables proposicionales.</
 <p> Este encoding sin contar las clausulas generadas por la regla (5) para el caso del sudoku de orden 3 nos creará 8829 clausulas de las cuales solamente 81 son clausulas que contienen  
 9 literales y el resto de las 8748 van a ser clausulas binarias, ya que solo poseen 2 literales por clausula. El resto de las clausulas que se agregarán después por la regla (5) serán todas unitarias. </p>
 
-<p>Este encoding implementado provee varias ventajas para la resolución de dicho problema, ya que en principio genera un conjunto  minimal de reglas, lo cual es importante para la resolución pero no suficiente si estas reglas no minimizan el número de literales para cada clausula. Para este caso este tipo encoding permite minimizar el número de clausulas de 9 literales y maximizar el número de clausulas binarias lo cual es vital para poseer una mejor corrida con los algoritmos de resolución, ya que les permite realizar una buena inferencia de manera más rápida sobre el espacio de búsqueda. Por lo que un punto importante para resolver este tipo de problemas es conseguir una buena codificación a formato CNF. </p>
+<p>Este encoding implementado provee varias ventajas para la resolución de dicho problema, ya que en principio genera un conjunto  minimal de reglas ya que no se están utilizando los casos de al menos equivalentes para las reglas (2),(3) y (4) , lo cual es importante para la resolución pero no suficiente si estas reglas no minimizan el número de literales para cada clausula. Para este caso este tipo encoding permite minimizar el número de clausulas de 9 literales y maximizar el número de clausulas binarias lo cual es vital para poseer una mejor corrida con los algoritmos de resolución, ya que les permite realizar una buena inferencia de manera más rápida sobre el espacio de búsqueda. Por lo que un punto importante para resolver este tipo de problemas es conseguir una buena codificación a formato CNF. </p>
 
 
 <p>Por último cabe destacar que para este problema se guardan en un diccionario cada una de las variables creadas como clave y se almacena una 3-tupla (fila,columna,valor) 
@@ -101,6 +100,7 @@ los conflictos, al momento en que deja de cumplirse no existe ninguna
 variable en la clausula que pueda tomar el valor de verdad y por lo tanto
 la asignación actual no es una solución.
 
+
 #### Traducción SAT a Sudoku
 	
 <p>Para esta parte una vez que ya se resolvió la satisfacibilidad de la teoría SAT del problema asociado se procede a verificar en caso de que sea el resultado satisfacible cuáles son 
@@ -119,14 +119,15 @@ archivo nombreDelArchivo donde se extrajo el caso de prueba.  Cada archivo va a 
 
 	- CNFs: Esta carpeta posee los archivos en formato CNF DIMACS como se encuentran especificado en el enunciado.
 
-	- outputDimacs: Esta carpeta posee los archivos en formato Dimacs del resultado del satSolver seleccionado solamente cuando es satisfacible la respuesta. 
-					Siguiendo el formato del enunciado.
+	- outputDimacs: Esta carpeta posee los archivos en formato Dimacs del resultado del satSolver seleccionado.Siguiendo la especificación del enunciado.
 	
 	- outputZCHAFF: En esta carpeta cada archivo posee las estadísticas que devuelve zchaff por la terminal para su caso especifico determinado por el nombre del archivo.
 	
 	- outputDPLL: Esta carpeta guarda el reporte específico para cada caso corrido con el solver DPLL
 	
 	- outputZchaffRun: Esta carpeta guarda el reporte especifíco para cada caso corrido con el zchaff solver
+	
+	- Tests: En dicha carpeta se encuentran todos los casos de prueba a correr por sudokuSat.py
 
 <p>Para tanto la carpetas outputDPLL y outputZchaffRun es el siguiente: </p>
 
@@ -144,6 +145,8 @@ archivo nombreDelArchivo donde se extrajo el caso de prueba.  Cada archivo va a 
  - Python 3 debe estar instalado para el funcionamiento 
 
  - Utilizar la versión de zchaff provisto en el repositorio. 
+ 
+ - Compilar haciendo "make" o "make all" el archivo de zchaff, para poder ejecutar el script (se procede a explicar más adelante)
 
 Dicha version de zchaff es la zchaff.2008.10.12 
 
@@ -160,9 +163,9 @@ a las carpetas siguientes zchaff.2008.10.12/zchaff para luego abrir la terminal 
 	make
 ```
 
+estos pasos anteriores son necesarios para poder compilar zchaff y poder ejecutar esta funcionalidad para sudokuSat.py .
 
-<p>Una vez realizada esta configuración para el zchaff, se procede a devolverse a la dirección principal del repositorio que es donde se encuentra el script sudokuSat.py, 
-es necesario que a ese mismo nivel del filesystem se encuentren los archivos de texto con los casos de prueba y que dicho archivo tenga extension txt.  </p>
+<p>Una vez realizada esta configuración para el zchaff, se procede a devolverse a la dirección principal del repositorio que es donde se encuentra el script sudokuSat.py </p>
 
 <p>El comando para correr los solvers es el siguiente: </p>
 
@@ -181,23 +184,28 @@ python3 sudokuSat.py archivoLectura.txt solverMethod tiempo
 <p>Después de ejecutar dicho comando el script se encargará de solucionar los casos de pruebas pasados en el archivo con el método elegido y hará la distribución 
 de los archivos a sus respectivas carpetas.
 
-Para ver los resultados devueltos por el solver ir a la carpeta outputZchaffRun en caso de ejecutar el metodo zchaff o a la carpeta outputDPLL en caso de correr DPLL 
+Para ver los resultados devueltos por el solver ir a la carpeta outputZchaffRun en caso de ejecutar el método zchaff (0) o a la carpeta outputDPLL en caso de correr DPLL (1)
 Con el fin de ver la información detallada de la distribución de los archivos ir a la sección de "Salida" en este readme </p>
-
-### Resultados
-
-
 
 
 ### Conclusion
 
-<p>Se pudo observar que a pesar de trabajar con instancias de sudoku de ordenes pequeñas la gran exploción combinatoria que tiene este tipo de problemas es alta por lo que el proceso de buscar una solución satisfacible o no crece rápidamente a medida que crece el orden del sudoku ya que las posibilidades combinatorias crecen. Esto se pudo constatar al ver como crece el número de literales y clausulas a medida que se aumenta el orden del sudoku. Por ejemplo para el caso de orden 2 se obtuvieron 64 literales y 304 clausulas, por otro lado para el caso de orden 3 se obtuvieron 729 literales y 8829 clausulas en ambos casos sin contar las clausulas unitarias que se agregan dependiendo de cuantos valores iniciales distintos de cero tenga la instancia de prueba. 
+<p>Se pudo observar a pesar de trabajar con instancias de sudoku de ordenes pequeñas la gran exploción combinatoria que tiene este tipo de problemas, la cual es bastante alta por lo que el proceso de buscar una solución satisfacible o no crece rápidamente a medida que crece el orden del sudoku ya que las posibilidades combinatorias crecen. Esto se pudo constatar al ver como crece el número de literales y clausulas a medida que se aumenta el orden del sudoku. Por ejemplo para el caso de orden 2 se obtuvieron 64 literales y 304 clausulas, por otro lado para el caso de orden 3 se obtuvieron 729 literales y 8829 clausulas en ambos casos sin contar las clausulas unitarias que se agregan dependiendo de cuantos valores iniciales distintos de cero tenga la instancia de prueba. 
 	
-Por otro lado trabajar con este tipo de aproximación para atacar problemas combinatorios como lo es el caso de un sudoku se puede observar que este tipo de enfoque permite conseguir una solución bastantemente rápida comparada con otros métodos alternativos como podría ser construir una implementación alterna con A* que posea una buena heurística admisible y consistente, además que el costo en memoria es sustancialmente menor, lo cual hace esta alternativa de SAT solvings un mejor enfoque.
+Por otro lado trabajar con este tipo de aproximación para atacar problemas combinatorios como lo es el caso de un sudoku se puede observar que este tipo de enfoque permite conseguir una solución bastantemente rápida comparada con otros métodos alternativos como podría ser construir una implementación alterna con A* que posea una buena heurística admisible y consistente, además que el costo en memoria es sustancialmente menor el de SAT, lo cual hace esta alternativa de SAT solvings un mejor enfoque.
+
+
+La implementación de zchaff permitió obtener los resultados para los 46 casos de prueba del txt instanciasSudoku.txt en menos de 1 segundo y el peor caso 
+de corrida con zchaff fue el de la linea 45 que tardó 0.010589 segundos, por otro lado, el mejor caso tardó 0.00014 segundos. En cambio nuestra implementación
+tardó 43.213 en el mejor caso el cual fue en la linea número 1 de instanciasSudoku.txt y en otro problema con nuestro solver obtuvimos la respuesta en 
+626.681 segundos. Por lo que no se pudo correr todos los casos de prueba con nuestra implementación de solver, ya que no cubría el tiempo asignado para hallar
+la solución.
 
 El tiempo de ejecución de un SAT solver depende principalmente de que tan rápido sea su mecanismo para propagar restricciones booleanas ya que esto es lo que hace que dicho problema se pueda resolver más rápido, esto último se pudo verificar mediante las comparaciones entre una implementación simple de propagación unitaria que tiene nuestra implementación comparada a la de los watched literals que lleva zchaff además de utilizar otras técnicas avanzadas. 
 
 Por último también pudo observarse que una buena implementación de restricciones en las clausulas en CNF puede hacer una buena diferencia a la hora de atacar el problema, dado a que dependiendo del enfoque al bajar el número de literales que se genera en cada clausula facilita a la propagación unitaria a que pueda hacer una mejor inferencia sobre la satisfacibilidad del problema. Esto se pudo observar dado a que al desarrollar la forma CNF en el proyecto probamos 2 implementaciones distintas. Al final se colocó en el proyecto la mejor implementación entre las dos que realizamos.</p>
+
+revisar archivo soluciones.txt
 	
  
 	 
@@ -207,4 +215,6 @@ Por último también pudo observarse que una buena implementación de restriccio
 
 		Moisés González - 11-10406
 		Fabio  Suárez   - 12-10578 
+
+
 
