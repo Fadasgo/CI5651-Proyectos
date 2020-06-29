@@ -100,6 +100,18 @@ los conflictos, al momento en que deja de cumplirse no existe ninguna
 variable en la clausula que pueda tomar el valor de verdad y por lo tanto
 la asignación actual no es una solución.
 
+Para implementar los watched literals utilizamos una lista de listas,
+las sublistas son cada una de las clausulas. Con ayuda de la biyección
+podemos indexarlas basados en el primer literal que ocurre. De esta
+forma cuando accedemos a una `watched_list[literal]` tenemos una lista
+con todas las clausulas que están haciendo seguimiento a ese literal.
+
+Para mantener el invariante, cada vez que hacemos una asignación
+buscamos las clausulas correspondientes a ese literal, y comprobamos
+si existen literales que no sean falsos para que puedan ser observados.
+De no ser así nos encontramos con un conflicto y la asignación no es 
+posible
+
 
 #### Traducción SAT a Sudoku
 	
