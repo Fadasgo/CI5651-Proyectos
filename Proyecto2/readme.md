@@ -28,7 +28,55 @@
 
 ### Implementacion
 
-#### DPLL Solver
+#### DPLL Solver 
+
+La estructura de datos principales es una lista para lo que se conoce como
+__watched literals__.
+La idea consiste en que cada cláusula lleva seguimiento
+de dos literales, al momento de una asignación debemos asegurarnos de que sus
+valores no sean falso (es decir, verdadero o indeterminado).
+Mantener esta restricción es lo que nos permite identificar rápidamente
+las cláusulas unitarias, cuando deja de cumplirse todos los literales
+excepto uno son falsos y la asignación es inmediata.
+Este proceso lo repetimos recursivamente y de esta forma logramos la
+propagación unitaria.
+
+Para implementar los watched literals utilizamos una lista de listas,
+los indices de la lista se corresponden con cada literal posible.
+Las sublistas son las cláusulas que están siendo observadas por cada literal.
+Para inicializarlas simplemente tomamos los dos primeros literales de
+cada cláusula y los ponemos a observarla.
+
+Una vez tenemos implementada la propagación unitaria, debemos
+implementar el backtracking, puesto que utilizaremos una versión
+iterativa del DPLL.
+La idea general es tener un ciclo en el cual iremos asignando variables
+y propagándolas hasta que no existan variables sin asignar.
+Para esto necesitaremos una pila de variables por asignar,
+una pila de eventos y una lista donde guardar las asignaciones de la 
+propagación.
+Cada vez que tomemos una decisión manualmente creamos debemos realizar
+la propagación.
+Si la propagación es exitosa entonces creamos un nuevo nivel de decisión.
+En este nivel guardaremos la variable que asignamos manualmente junto con
+las asignaciones. También es importante quitar de la pila de variables
+por asignar las variables que asignó la propagación.
+Si la propagación no es exitosa restauramos la asignación de la propagación,
+asignamos manualmente el otro valor posible y repetimos el proceso anterior.
+Si intentamos ambos valores manualmente y encontramos conflictos en ambos
+debemos hacer backtracking. Para saber cuales intentos llevamos tenemos un
+arreglo de estados para cada variable con valores entre 0 y 3, el 0 se corresponde
+con ningún intento, el 1 con true, el 2 con false y el 3 con ambos.
+Para hacer backtracking reiniciamos el estado de la variable actual a 0, la
+desasignamos y la incluimos de vuelta en la pila de variables por asignar.
+Desempilamos el nivel de decisión anterior, deshacemos la propagación que
+tomo lugar en ese nivel, agregamos las variables de esa propagación a la pila
+de variables por asignar y finalmente añadimos la variable del nivel anterior
+al tope de la pila de variables por asignar.
+
+Si queremos hacer backtracking y la pila de eventos esta vacía entonces
+el problema es UNSAT, por otro lado, si la pila de variables esta vacía
+entonces el encontramos una solución.
 
 
 #### Traducción SAT a Sudoku
@@ -180,9 +228,6 @@ Para las otras instancias en el tiempo de ejecución realizado no se lograron ob
  </p>
 
 El archivo soluciones.txt en la carpeta principal del proyecto 2 también provee los resultados obtenidos durante la ejecución. Cabe destacar que el tiempo es en segundos.
-	
- 
-	 
 
 <!-- Integrants -->
 ## Integrantes
