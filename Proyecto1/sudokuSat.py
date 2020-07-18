@@ -89,7 +89,7 @@ def runZchaff(nombreArchivo, tiempoCorrida):
 def runDPLL(nombreArchivo=None):
     s = Solver()
     s.read(nombreArchivo)
-    is_sat = "SAT" if s.solve(0) else "UNSAT"
+    is_sat = "SAT" if s.solve() else "UNSAT"
     output = s.output_dimacs()
     return (s.vars, s.number_clauses, is_sat, output)
 
