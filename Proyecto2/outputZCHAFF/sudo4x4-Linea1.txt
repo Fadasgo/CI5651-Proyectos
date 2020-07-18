@@ -1,0 +1,21 @@
+Z-Chaff Version: zChaff 2007.3.12
+Solving /home/fadasgo/Escritorio/sudokuSat/CNFs/sudo4x4-Linea1.txt ......
+
+c 308 Clauses are true, Verify Solution successful.
+Instance Satisfiable
+-1 -2 3 -4 -5 6 -7 -8 9 -10 -11 -12 -13 -14 -15 16 -17 -18 -19 20 21 -22 -23 -24 -25 26 -27 -28 -29 -30 31 -32 33 -34 -35 -36 -37 -38 -39 40 -41 -42 43 -44 -45 46 -47 -48 -49 50 -51 -52 -53 -54 55 -56 -57 -58 -59 60 61 -62 -63 -64 Random Seed Used				0
+Max Decision Level				0
+Num. of Decisions				1
+( Stack + Vsids + Shrinking Decisions )		0 + 0 + 0
+Original Num Variables				64
+Original Num Clauses				308
+Original Num Literals				644
+Added Conflict Clauses				0
+Num of Shrinkings				0
+Deleted Conflict Clauses			0
+Deleted Clauses					0
+Added Conflict Literals				0
+Deleted (Total) Literals			0
+Number of Implication				64
+Total Run Time					2.8e-05
+RESULT:	SAT
